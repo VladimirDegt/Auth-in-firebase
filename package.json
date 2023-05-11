@@ -25,10 +25,12 @@
     "@parcel/transformer-sass": "^2.6.0",
     "axios": "^1.3.6",
     "buffer": "^6.0.3",
+    "firebase": "^9.21.0",
     "notiflix": "^3.2.6",
     "parcel": "^2.6.0",
     "parcel-reporter-clean-dist": "^1.0.4",
     "posthtml-include": "^1.7.4",
+    "process": "^0.11.10",
     "simplelightbox": "^2.13.0",
     "spin.js": "^4.1.1"
   },

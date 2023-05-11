@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Photos</title>
+    <title>Auth</title>
     <link rel="stylesheet" href="./sass/index.scss" />
     <link rel="stylesheet" href="./sass/spin.css"/>
     <script type="module" src="./index.js"></script>
@@ -15,11 +15,21 @@
         <form class="search-form" id="search-form">
           <input
             type="text"
-            name="searchQuery"
-            autocomplete="off"
-            placeholder="Search images..."
+            name="username"
+            placeholder="username..."
           />
-          <button type="submit">Search</button>
+          <input
+            type="email"
+            name="email"
+            placeholder="email..."
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="password..."
+          />
+          <button type="submit" id="signIn">SIGN UP</button>
+          <button type="button" id="logOut">LOG OUT</button>
         </form>
       </nav>
       <div class="gallery">

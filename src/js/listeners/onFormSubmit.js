@@ -1,42 +1,92 @@
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { initializeApp } from "firebase/app";
+import { getAuth, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getDatabase, ref, set, update } from "firebase/database";
 
-import { instanceApiService } from "../api-service";
-import { renderPhotos } from "../render-photos";
-import { clearPagePhotos } from "../clear-page-photos";
+const firebaseConfig = {
+  apiKey: "AIzaSyC7Z7_-Y0HZydiU1oV6nn67k_xdA2wTdKw",
+  authDomain: "auth-4cd7f.firebaseapp.com",
+  projectId: "auth-4cd7f",
+  storageBucket: "auth-4cd7f.appspot.com",
+  messagingSenderId: "584186100730",
+  appId: "1:584186100730:web:7d9867ccbf4b0067e48243",
+  databaseURL: "https://auth-4cd7f-default-rtdb.firebaseio.com",
+};
 
-export async function onFormSubmit (e) {
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app)
+
+
+export function onFormSubmit (e) {
     e.preventDefault();
+
+    const username = e.target.elements.username.value
+    const email = e.target.elements.email.value
+    const password = e.target.elements.password.value
+
+    if(document.querySelector('#signUp')){
+      createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
   
-    const {searchQuery} = e.target.elements;
-    const findItem = searchQuery.value.trim()
-    if(!findItem) {
-      return
-    }
-
-    if(instanceApiService.searchValue === findItem) {
-      return
-    }
-
-    clearPagePhotos();
-
-    instanceApiService.searchValue = findItem;
-    instanceApiService.resetPage();
-    instanceApiService.resetTotalElementsOnPage();
-
-    try {
-      const objectResolve = await instanceApiService.fetchPhoto();
-      const {totalHits, hits} = objectResolve;
-      
-      if(hits.length === 0) {
-        return Notify.failure('Sorry, there are no images matching your search query. Please try again.')
-      }
+        set(ref(database, 'users/' + user.uid), {
+          username,
+          email,
+        })
+        console.log('user created!');
+        alert('user created!')
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
   
-      Notify.success(`Hooray! We found ${totalHits} images.`)
-      instanceApiService.totalElements = hits.length;
-      
-      renderPhotos(hits, e)
-    } catch(error) {
-      console.log(error.message);
-    }  
+        alert(errorMessage);
+        // ..
+    });
+    } else if(document.querySelector('#signIn')) {
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+
+        const dt = new Date();
+        update(ref(database, 'users/' + user.uid), {
+          last_login: dt,
+        })
+
+        alert('user loged in!')
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        alert(errorMessage);
+  });
+    }
   };
-  
+  const user = auth.currentUser;
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid;
+      console.log('пользователь в сис-ме и можно ему разрешить сделать ...');
+    } else {
+      // User is signed out
+    }
+  });
+
+  export function onClickLogOut() {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      console.log('пользователь вышел');
+      alert('user loged out')
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      alert(errorMessage);
+    });
+  }
