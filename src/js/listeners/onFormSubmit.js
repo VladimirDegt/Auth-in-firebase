@@ -16,7 +16,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app)
 
-
 export function onFormSubmit (e) {
     e.preventDefault();
 
@@ -27,7 +26,7 @@ export function onFormSubmit (e) {
     if(document.querySelector('#signUp')){
       createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in 
+
         const user = userCredential.user;
   
         set(ref(database, 'users/' + user.uid), {
@@ -42,12 +41,10 @@ export function onFormSubmit (e) {
         const errorMessage = error.message;
   
         alert(errorMessage);
-        // ..
     });
     } else if(document.querySelector('#signIn')) {
       signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in 
         const user = userCredential.user;
 
         const dt = new Date();
@@ -56,7 +53,6 @@ export function onFormSubmit (e) {
         })
 
         alert('user loged in!')
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -66,15 +62,14 @@ export function onFormSubmit (e) {
   });
     }
   };
+
   const user = auth.currentUser;
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
       const uid = user.uid;
       console.log('пользователь в сис-ме и можно ему разрешить сделать ...');
     } else {
-      // User is signed out
+
     }
   });
 
