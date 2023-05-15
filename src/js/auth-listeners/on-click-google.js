@@ -1,7 +1,8 @@
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { ref, set } from "firebase/database";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-import { auth } from "./auth-config-firebase";
+import { auth, database } from "./auth-config-firebase";
 import { provider } from "./auth-config-firebase";
 
 export function onClickGoogle() {
@@ -13,6 +14,12 @@ export function onClickGoogle() {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        set(ref(database, 'users/' + user.uid), {
+          username: user.displayName,
+          email: user.email,
+        })
+
+        Notify.success('Пользователь зарегистрирован!')
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       }).catch((error) => {
