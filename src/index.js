@@ -1,7 +1,9 @@
-import { onFormSubmit, onClickLogOut } from "./js/listeners/onFormSubmit";
-import { refs } from "./js/refs-elements";
+import { onClickSignUp } from "./js/auth-listeners/on-click-sign-up";
+import { onClickSignIn } from "./js/auth-listeners/on-click-sign-in";
+import { onClickLogOut } from "./js/auth-listeners/on-click-log-out";
 
-refs.form.addEventListener('submit', onFormSubmit);
+document.querySelector('#signUp').addEventListener('click', onClickSignUp);
+document.querySelector('#signIn').addEventListener('click', onClickSignIn);
 document.querySelector('#logOut').addEventListener('click', onClickLogOut);
 
 
